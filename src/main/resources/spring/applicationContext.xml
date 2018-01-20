@@ -1,0 +1,49 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd ">
+
+  <!--1.数据库配置-->
+  <context:property-placeholder  location="classpath:spring/db.properties"/>
+
+  <!-- 2.数据库连接池 -->
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="${jdbc.driver}" />
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+    <property name="maxActive" value="30" />
+    <property name="maxIdle" value="5" />
+    <property name="defaultAutoCommit" value="false"/>
+  </bean>
+
+  <!--3.配置 sqlSessionFactory 对象-->
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!-- 注入数据库连接池 -->
+    <property name="dataSource" ref="dataSource" />
+    <!-- 加载mybatis的全局配置文件 -->
+    <property name="configLocation" value="classpath:spring/SqlMapConfig.xml"/>
+    <!-- 扫描 entity 包配使用别名-->
+    <property name="typeAliasesPackage" value="org.seckill.entity"/>
+    <!--扫描sql配置文件：mapper需要的xml文件-->
+     <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+  </bean>
+
+  <!--4:配置扫描dao接口包，动态实现dao接口，并注入到spring容器中-->
+  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <!--注入 sqlSessionFactory-->
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    <!--给出扫描dao接口包-->
+    <property name="basePackage" value="org.seckill.dao"/>
+  </bean>
+</beans>
