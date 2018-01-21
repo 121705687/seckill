@@ -3,8 +3,8 @@
 <mapper namespace="org.seckill.dao.SuccessKilledDao">
   <insert id="insertSuccessKilled">
     /*主键冲突，报错 ignore */
-    insert ignore into success_killed(seckill_id,user_phone)
-    values (#{seckillId},#{userPhone})
+    insert ignore into success_killed(seckill_id,user_phone,state)
+    values (#{seckillId},#{userPhone},0)
   </insert>
 
   <!--这也是一种映射方式-->
@@ -15,13 +15,13 @@
       sk.create_time,
       sk.state,
       s.seckill_id "seckill.seckill_id",
-      s.name "seckill.name"
+      s.name "seckill.name",
       s.number "seckill.number",
       s.start_time "seckill.start_time",
       s.end_time "seckill.end_time",
       s.create_time "seckill.create_time"
     from success_killed sk
-    inner join seckil s on sk.seckill_id = s.seckill_id
-    where sk.seckill_id=#{seckillId}
+    inner join seckill s on sk.seckill_id = s.seckill_id
+    where sk.seckill_id=#{seckillId} and sk.user_phone=#{userPhone}
   </select>
 </mapper>
