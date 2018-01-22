@@ -47,6 +47,8 @@ public class SeckillController {
         if(seckill==null){
             return "forward:/seckill/list";
         }
+        seckill.setStartStr(seckill.getStartTime().getTime());
+        seckill.setEndStr(seckill.getEndTime().getTime());
         model.addAttribute("seckill",seckill);
         return "detail";
     }
@@ -54,7 +56,7 @@ public class SeckillController {
     @RequestMapping(value = "/{seckillId}/exposer",
                     produces = {"application/json;charset=UTF-8"})
     @ResponseBody   //有这个注解springmvc 视图将数据封装成json
-    public SeckillResult<Exposer> exposer(Long seckillId){
+    public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId){
         SeckillResult<Exposer> result;
         try{
             Exposer exposer = seckillService.exportSeckillUrl(seckillId);
@@ -79,18 +81,19 @@ public class SeckillController {
             return new SeckillResult<SeckillExecution>(true,seckillExecution);
         }catch (RepeatKillException e){
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.REPEAT_KILL.getState(),SeckillStatEnum.REPEAT_KILL.getStateInfo());
-            return new SeckillResult<SeckillExecution>(false,seckillExecution);
+            return new SeckillResult<SeckillExecution>(true,seckillExecution);
         }catch (SeckillCloseException e){
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.END.getState(),SeckillStatEnum.END.getStateInfo());
-            return new SeckillResult<SeckillExecution>(false,seckillExecution);
+            return new SeckillResult<SeckillExecution>(true,seckillExecution);
         }catch (Exception e){
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.INNER_ERROR.getState(),SeckillStatEnum.INNER_ERROR.getStateInfo());
-            return new SeckillResult<SeckillExecution>(false,seckillExecution);
+            return new SeckillResult<SeckillExecution>(true,seckillExecution);
         }
     }
 
     //获取系统时间
     @RequestMapping(value = "/time/now")
+    @ResponseBody
     public SeckillResult<Long> time(){
         Date now = new Date();
         return new SeckillResult(true,now.getTime());

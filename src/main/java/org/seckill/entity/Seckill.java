@@ -13,4 +13,7 @@ public class Seckill implements Serializable{
     private Date startTime;
     private Date endTime;
     private Date createTime;
+
+    private long startStr;
+    private long endStr;
 }
