@@ -41,8 +41,8 @@ public class SeckillServiceTest {
     @Test
     public void exportSeckillUrl() throws Exception {
         long id =1000;
-        Exposer exposer = seckillService.exportSeckillUrl(id);
-        System.out.println(JSON.toJSONString(exposer));
+//        Exposer exposer = seckillService.exportSeckillUrl(id);
+//        System.out.println(JSON.toJSONString(exposer));
     }
 
     @Test
@@ -50,8 +50,8 @@ public class SeckillServiceTest {
         long id=1000;
         long phone = 13512341234L;
         String md5 = "3707b652d3deb5dc8899bfae1ca36c51";
-        SeckillExecution seckillExecution = seckillService.executeSeckill(id, phone, md5);
-        System.out.println(JSON.toJSONString(seckillExecution));
+//        SeckillExecution seckillExecution = seckillService.executeSeckill(id, phone, md5);
+//        System.out.println(JSON.toJSONString(seckillExecution));
     }
 
 }

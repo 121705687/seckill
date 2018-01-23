@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <div class="panel panel-default text-center">
-            <div class="pannel-heading">${seckill.name}</div>
+            <div class="pannel-heading"><h3>${seckill.name}</h3></div>
             <div class="panel-body">
                 <h2 class="text-danger">
                     <%--显示taime图标--%>
